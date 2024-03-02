@@ -34,6 +34,7 @@ public class BookAdapter extends BaseAdapter{
     Intent intent;
     Context ctx;
     ArrayList<Book> books = new ArrayList<Book>();
+    static int count = 0;
 
     public BookAdapter(ArrayList<Book> books, Context c) {
         this.ctx = c;
@@ -67,12 +68,11 @@ public class BookAdapter extends BaseAdapter{
             binding.tvCost.setText("Cost: " + String.valueOf(b.getCost()));
             binding.tvIdenf.setText("Identificator: " + String.valueOf(b.getIdent()));
             binding.tvName.setText("Name: " + String.valueOf(b.getName()));
-            binding.ivPicture.setImageResource(R.drawable.ic_launcher_background);
+            binding.ivPicture.setImageResource(b.getImage());
             binding.cbBox.setOnCheckedChangeListener(clickListener);
             binding.cbBox.setTag(i);
             binding.cbBox.setChecked(b.getCheck());
             return tmp;
-
     }
 
     Book getBook(int position) {
@@ -82,7 +82,14 @@ public class BookAdapter extends BaseAdapter{
     OnCheckedChangeListener clickListener = new OnCheckedChangeListener() {
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             getBook((Integer) buttonView.getTag()).setCheck(isChecked);
+            for (Book b : books){
+                if (b.getCheck()){
+                    count+=1;
+                }
+            }
 
+            MainActivity.updateFooter();
+            count = 0;
         }
     };
 

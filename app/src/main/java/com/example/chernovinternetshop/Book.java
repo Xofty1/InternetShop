@@ -14,6 +14,7 @@ public class Book implements Serializable {
         this.cost = cost;
         this.name = name;
         this.isCheck = isCheck;
+        this.image = image;
 
     }
 

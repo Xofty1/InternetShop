@@ -16,10 +16,10 @@ import android.widget.TextView;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
 
-    int[] img = {R.drawable.ic_launcher_background};
+    int[] img = {R.drawable.book, R.drawable.shadow, R.drawable.book2, R.drawable.book3, R.drawable.book4, R.drawable.book5, R.drawable.book7, R.drawable.book8, R.drawable.book9, R.drawable.book10};
     String[] bookNames = {
             "Путешествие в неизвестность",
             "Тени прошлого",
@@ -45,9 +45,9 @@ public class MainActivity extends AppCompatActivity{
             2900    // Стоимость книги "Под лунным светом"
     };
     ArrayList<Book> books = new ArrayList<Book>();
-    View footer;
-    int count = 0;
+    static View footer;
     Intent intent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity{
         BookAdapter ba = new BookAdapter(books, this);
         intent = new Intent(this, BasketActivity.class);
         binding.lvMain.setAdapter(ba);
-        footer = createFooter("Book in Basket: " + String.valueOf(count));
+        footer = createFooter();
         binding.lvMain.addFooterView(footer);
 //        binding.btnBasket.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -74,31 +74,25 @@ public class MainActivity extends AppCompatActivity{
 
     void createBooks() {
         for (int i = 0; i < bookNames.length; i++) {
-            Book book = new Book(i, bookPrices[i], bookNames[i], false, img[0]);
+            Book book = new Book(i, bookPrices[i], bookNames[i], false, img[i]);
             books.add(book);
         }
     }
 
-    View createFooter(String text) {
+    View createFooter() {
         View v = getLayoutInflater().inflate(R.layout.footer, null);
-        ((TextView) v.findViewById(R.id.tvFooter)).setText(text);
-        View b = getLayoutInflater().inflate(R.layout.footer, null);
-        ((Button) b.findViewById(R.id.btnBasket)).setOnClickListener(new View.OnClickListener() {
+        ((Button) v.findViewById(R.id.btnBasket)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d("dsa", String.valueOf(books.get(0).getCheck()));
                 intent.putExtra("Books", books);
+                BookAdapter.count = 0;
                 startActivity(intent);
             }
         });
         return v;
     }
-    CompoundButton.OnCheckedChangeListener clickListener = new CompoundButton.OnCheckedChangeListener() {
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            if (isChecked) count++;
-            else count--;
-            createFooter("Book in Basket: " + String.valueOf(count));
-        }
-    };
-
+    public static void updateFooter(){
+        ((TextView)footer.findViewById(R.id.tvFooter)).setText("Book in Basket: "+ BookAdapter.count);
+    }
 }

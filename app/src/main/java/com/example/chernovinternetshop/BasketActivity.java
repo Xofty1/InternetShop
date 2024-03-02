@@ -6,10 +6,14 @@ import com.example.chernovinternetshop.databinding.ActivityBasketBinding;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -50,17 +54,34 @@ public class BasketActivity extends AppCompatActivity {
                 checkedBooks.add(b);
             }
         }
+        int total = 0;
         LayoutInflater lf = getLayoutInflater();
         for (Book b : checkedBooks) {
+            total += b.getCost();
             View v = lf.inflate(R.layout.checked, binding.linLayout, false);
             TextView tvCost = v.findViewById(R.id.tvCost);
-            tvCost.setText(String.valueOf((b.getCost())));
+            tvCost.setText("Cost: " + String.valueOf((b.getCost())));
             TextView tvName = v.findViewById(R.id.tvName);
-            tvName.setText(String.valueOf((b.getName())));
+            tvName.setText("Name: " + String.valueOf((b.getName())));
             TextView tvIdenf = v.findViewById(R.id.tvIdenf);
-            tvIdenf.setText(String.valueOf((b.getIdent())));
+            tvIdenf.setText("Identificarot: "+ b.getIdent());
             v.getLayoutParams().width = ActionBar.LayoutParams.MATCH_PARENT;
             binding.linLayout.addView(v);
         }
+        TextView tvTotal = new TextView(this);
+        tvTotal.setText("Total cost: " + total);
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        tvTotal.setTypeface(null, Typeface.BOLD);
+
+        tvTotal.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+        tvTotal.setLayoutParams(layoutParams);
+
+        binding.linLayout.addView(tvTotal);
+
+
     }
 }
